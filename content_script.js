@@ -180,32 +180,8 @@ $(function(){
   	});
 
 	console.log(packageICS(icsFile));
-	// var html = '<button id="myBtn">Open Modal</button>';
-	// html += '<div id="myModal" class="modal">';
-	// html += '<div class="modal-content">';
-	// html += '<span class="close">x</span>';
-	// html += '<a href="#" onclick="window.open(\'data:text/calendar;charset=utf8,' +
- //            			encodeURIComponent(packageICS(icsFile)) +
- //            			'\');">Download Schedule</a>';
-	// html += '</div>';
-	// html += '</div>';
 
-	/*var html =  '(<!-- Modal Trigger -->' +
-	//'<button data-target="modal1" class="btn modal-trigger">Modal</button>' +
-  '<a class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a>' +
-
-  '<!-- Modal Structure -->' +
-  '<div id="modal1" class="modal1 bottom-sheet">' +
-    '<div class="modal-content">' +
-      '<h4>Modal Header</h4>' +
-      '<p>A bunch of text</p>' +
-    '</div>' +
-    '<div class="modal-footer">' +	
-      '<a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>' +
-    '</div>' +
-  '</div>';*/
-
-  	//$('.PSGROUPBOXWBO').hide();
+	//HTML for modal popup
   	var html = '<!-- Trigger the modal with a button -->' +
 				'<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>' +
 
@@ -232,7 +208,7 @@ $(function(){
 
 
   	console.log(html);
+  	//Insert modal html under My Class Schedule text
 	$('.PATRANSACTIONTITLE').append(html);
 
-	//$(document.body).append('<link rel="stylesheet" href="materialize.css" type="text/css" />');
 });
