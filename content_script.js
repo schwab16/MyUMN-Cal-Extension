@@ -72,18 +72,61 @@ $(function(){
 	//this is the generic template required for the ICS file format
 	function packageICS(icsData)
 	{
+		var icsFinal = checkCheckbox(icsData); //gets the raw data for the checked classes and inserts it into template
 		var result = 'BEGIN:VCALENDAR\n' +
       				'VERSION:2.0\n' +
       				'PRODID:-//Isaac S./UMN Class Schedule Export//EN\n' +
-      				icsData +
+      				icsFinal +
       				'END:VCALENDAR\n';
       	return result;
 	}
+
+	//checks the state of the checkboxes in the modal popup
+	function checkCheckbox(icsData){
+		var finalData = '';
+		for(var i = 0; i < icsData.length; i++)//iterates through dictionary
+		{
+			var classValue = icsData[i].key; //unique value for checkbox
+			console.log(classValue);
+			$('input[value="' + classValue + '"]');
+			console.log($('input[value="' + classValue + '"]').is(':checked'));
+			//console.log($("input[value='" + classValue + "']").prop("checked"));
+			// var isChecked = $("input[value='" + classValue + "']").is(":checked"); //checks if specific checkbox is checked
+			// if(isChecked)
+			// {
+			 	finalData += icsData[i].value; //if it is checked we add the value data to the finalICS content
+			// }
+		}
+		return finalData;
+	}
+
+	//Create a list html element for modal display
+	function makeUL(elements) {
+	    // Create the list element:
+	    var form = document.createElement('form');
+
+	    /*for(var i = 0; i < array.length; i++) {
+	        // Create the list item
+	        var input = '<input type="checkbox" name="class" value="' + i + '"" > '+ classDisp + '(' + component + ')' + '<br>';
+	        var item = document.createElement('input');
+
+	        // Set its contents:
+	        //item.appendChild(document.createTextNode(array[i]));
+
+	        // Add it to the list:
+	        
+	    }*/
+	    form.appendChild(elements);
+	    // Finally, return the constructed list:
+	    return form;
+	}
+
 
 
 	//this array will contain all the classes that we will parse through below
 	var icsFile = [];
 	var modalArray = [];
+	var modalContent = '<form>';
 	console.log("Here");
 
 	//selects each class element
@@ -162,8 +205,15 @@ $(function(){
 			        icsSingle = icsSingle.replace(/\s{2,}/g, ' ');
 			        console.log(icsSingle);
 
+			        //var modalElement = 
+			        modalContent += '<input type="checkbox" name="class" value="' + classNumber + '" checked="checked"> '+ classDisp + '(' + component + ') - ' + datetime + '<br>';
+			        //modalArray.push()
+
 			        //add the individual class to the download file
-			        icsFile.push(icsSingle);
+			        icsFile.push({key:classNumber,value:icsSingle});
+			        console.log(icsFile);
+			        console.log("Key: " + icsFile[0].key);
+			        console.log("Value: " + icsFile[0].value);
 
 
 			        $(this).find('span[id*="MTG_DATES"]').append(
@@ -181,9 +231,17 @@ $(function(){
 
 	console.log(packageICS(icsFile));
 
+	//var formList = makeUL(modalContent);
+	modalContent += '</form>';
+	console.log(modalContent);
+	//console.log(formList);
+
+
+
+
 	//HTML for modal popup
   	var html = '<!-- Trigger the modal with a button -->' +
-				'<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>' +
+				'<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Export Calendar</button>' +
 
 				'<!-- Modal -->' +
 				'<div id="myModal" class="modal fade" role="dialog">' +
@@ -193,13 +251,14 @@ $(function(){
 				    '<div class="modal-content">' +
 				      '<div class="modal-header">' +
 				        '<button type="button" class="close" data-dismiss="modal">&times;</button>' +
-				        '<h4 class="modal-title">Modal Header</h4>' +
+				        '<h4 class="modal-title">UMN Calendar Export for Google Calendar or iCal</h4>' +
 				      '</div>' +
 				      '<div class="modal-body">' +
-				        '<p>Some text in the modal.</p>' +
+				        modalContent +
 				      '</div>' +
 				      '<div class="modal-footer">' +
-				        '<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>' +
+				        '<button type="button" class="btn btn-default" data-dismiss="modal">Export</button>' +
+				        '<button type="button" class="btn btn-default" data-dismiss="modal">Download for iCal</button>' +
 				      '</div>' +
 				    '</div>' +
 
