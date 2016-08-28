@@ -1,0 +1,26 @@
+{
+  "manifest_version": 2,
+
+  "name": "UMN Schedule",
+  "description": "This extension selects class data from University of Minnesota schedules and formats them to be downloaded as ICS files to be used with iCal or Google Calendar",
+  "version": "1.0",
+
+  "browser_action": {
+    "default_icon": "icon.png"
+  },
+
+  "content_scripts": [
+    {
+      "all_frames": true,
+      "matches": [ "https://cs.myu.umn.edu/*" ],
+      "css": ["bootstrap.min.css"],
+      "js": ["jquery-3.1.0.min.js", "bootstrap.min.js", "umn_cal.js"],
+      "web_accessible_resources": ["jquery-3.1.0.min.js"]
+    }
+  ],
+
+  "permissions": [
+    "activeTab",
+    "https://ajax.googleapis.com/"
+  ]
+}
