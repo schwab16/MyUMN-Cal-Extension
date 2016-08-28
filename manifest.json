@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "UMN Schedule Export",
-  "description": "This extension selects class data from University of Minnesota schedules and formats them to be downloaded as ICS files to be used with iCal or Google Calendar",
+  "description": "Selects class data from UofM schedules and formats them to be downloaded as ICS files to be used with iCal or Google Calendar",
   "version": "1.0",
 
   "icons": { "16": "icon16.png",
