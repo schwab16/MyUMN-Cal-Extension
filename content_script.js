@@ -4,12 +4,10 @@
 // Allows users to download an ICS calendar file		//							
 //														//
 //////////////////////////////////////////////////////////
-//$(document.body).append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.96.1/css/materialize.min.css">');
 //Load document and initalize jQuery
 $(function(){
-  	//$('.modal-trigger').leanModal();
+  	
   	//The following functions are used to format data for ICS format//
-
 	var timezone = 'America/Chicago';
 
   	// Date object -> '19920517'
@@ -81,75 +79,39 @@ $(function(){
       	return result;
 	}
 
-	//checks the state of the checkboxes in the modal popup
+	//checks the state of the checkboxes in the modal popup, and then selects data of for checked class
 	function checkCheckbox(icsData){
 		var finalData = '';
 		for(var i = 0; i < icsData.length; i++)//iterates through dictionary
 		{
 			var classValue = icsData[i].key; //unique value for checkbox
-			console.log(typeof(classValue));
-			//$('input[value="' + classValue + '"]');
-			//console.log($('input[value="' + classValue + '"]').checked);
-			//console.log(document.getElementById(classValue).checked);
-			//console.log($('input[value="' + classValue + '"]').prop("checked"));
-			//console.log($("input[value='" + classValue + "']").prop("checked"));
-			 var isChecked = document.getElementById(classValue).checked; //checks if specific checkbox is checked
-			 if(isChecked)
-			 {
-			 	finalData += icsData[i].value; //if it is checked we add the value data to the finalICS content
-			 }
+			var isChecked = document.getElementById(classValue).checked; //checks if specific checkbox is checked
+			if(isChecked)
+			{
+				finalData += icsData[i].value; //if it is checked we add the value data to the finalICS content
+			}
 		}
 		return finalData;
 	}
 
-	//Create a list html element for modal display
-	function makeUL(elements) {
-	    // Create the list element:
-	    var form = document.createElement('form');
 
-	    /*for(var i = 0; i < array.length; i++) {
-	        // Create the list item
-	        var input = '<input type="checkbox" name="class" value="' + i + '"" > '+ classDisp + '(' + component + ')' + '<br>';
-	        var item = document.createElement('input');
-
-	        // Set its contents:
-	        //item.appendChild(document.createTextNode(array[i]));
-
-	        // Add it to the list:
-	        
-	    }*/
-	    form.appendChild(elements);
-	    // Finally, return the constructed list:
-	    return form;
-	}
-
-
-
-	//this array will contain all the classes that we will parse through below
+	//this array will contain all the classes that we will parse through below, is an array that acts like a dict
 	var icsFile = [];
-	var modalArray = [];
+
+	//modal content will contain html for checkbox list, we will inject it into the modal
 	var modalContent = '<form>';
-	console.log("Here");
 
 	//selects each class element
    $('.PSGROUPBOXWBO').each(function() {
-   		console.log("true");
 	   	//first grab the name of the class
 	   	var className = $(this).find('.PAGROUPDIVIDER').text().split('-');
 	   	var classDisp = className[0];
 	   	var classDesc = className[1];
-	   	console.log(className);
+
 	   	//next we grab the container with all the class data
 	   	var classData = $(this).find('.PSLEVEL3GRIDNBO').find('tr');
-	   	var makeNewColumn = $(this).find('.PSLEVEL3GRIDCOLUMNHDR');
-	   	// makeNewColumn.each(function(){
-	   	// 	var colCheck = $(this).text();
-	   	// 	if(colCheck == "Start/End Date")
-	   	// 	{
-	   	// 		$('<th scope="col" abbr="Download" width="80" align="left" class="PSLEVEL3GRIDCOLUMNHDR">Download</th>').after(this);
-	   	// 	}
-	   	// })
-	   	//iterate through class data to get details
+
+	   	//iterate through class data to get details (breaks up class block into lecture and discussion)
 	   	classData.each(function() 
 	   	{
       
@@ -205,40 +167,26 @@ $(function(){
 
 			        //delete any acidental double spaces
 			        icsSingle = icsSingle.replace(/\s{2,}/g, ' ');
-			        console.log(icsSingle);
 
-			        //var modalElement = 
+			        //add each class element to the checkbox list for theh modal
 			        modalContent += '<input type="checkbox" name="class" id="' + classNumber + '" checked="checked"> '+ classDisp + '(' + component + ') - ' + datetime + '<br>';
-			        //modalArray.push()
 
-			        //add the individual class to the download file
+			        //add the individual class to the download file, using dict object to easily search by class number for checkbox selection
 			        icsFile.push({key:classNumber,value:icsSingle});
+			        
 			        console.log(icsFile);
-			        console.log("Key: " + icsFile[0].key);
-			        console.log("Value: " + icsFile[0].value);
+		      	}//end of times if     
+		    }//end of classNumber if
+		});//end of iterating through a class block
+  	});//end of iterating through schedule (should have all the data we need now)
 
 
-			        // $(this).find('span[id*="MTG_DATES"]').append(
-           //  			'<br><a href="#" onclick="window.open(\'data:text/calendar;charset=utf8,' +
-           //  			encodeURIComponent(packageICS(icsFile)) +
-           //  			'\');">Download Class</a>'
-          	// 		);
 
-		      	}	      
-		    }
-		});
-
-
-  	});
-
-	
-
-	//var formList = makeUL(modalContent);
+	//finish the modalConent html
 	modalContent += '</form>';
 	console.log(modalContent);
-	//console.log(formList);
 
-	//HTML for modal popup
+	//HTML for modal popup, modalContent is inserted into the body
   	var html = '<!-- Trigger the modal with a button -->' +
 				'<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Export Calendar</button>' +
 
@@ -262,7 +210,7 @@ $(function(){
 				    '</div>' +
 
 				  '</div>' +
-				'</div>'
+				'</div>';
 
 
   	console.log(html);
