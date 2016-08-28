@@ -87,15 +87,17 @@ $(function(){
 		for(var i = 0; i < icsData.length; i++)//iterates through dictionary
 		{
 			var classValue = icsData[i].key; //unique value for checkbox
-			console.log(classValue);
-			$('input[value="' + classValue + '"]');
-			console.log($('input[value="' + classValue + '"]').is(':checked'));
+			console.log(typeof(classValue));
+			//$('input[value="' + classValue + '"]');
+			//console.log($('input[value="' + classValue + '"]').checked);
+			//console.log(document.getElementById(classValue).checked);
+			//console.log($('input[value="' + classValue + '"]').prop("checked"));
 			//console.log($("input[value='" + classValue + "']").prop("checked"));
-			// var isChecked = $("input[value='" + classValue + "']").is(":checked"); //checks if specific checkbox is checked
-			// if(isChecked)
-			// {
+			 var isChecked = document.getElementById(classValue).checked; //checks if specific checkbox is checked
+			 if(isChecked)
+			 {
 			 	finalData += icsData[i].value; //if it is checked we add the value data to the finalICS content
-			// }
+			 }
 		}
 		return finalData;
 	}
@@ -206,7 +208,7 @@ $(function(){
 			        console.log(icsSingle);
 
 			        //var modalElement = 
-			        modalContent += '<input type="checkbox" name="class" value="' + classNumber + '" checked="checked"> '+ classDisp + '(' + component + ') - ' + datetime + '<br>';
+			        modalContent += '<input type="checkbox" name="class" id="' + classNumber + '" checked="checked"> '+ classDisp + '(' + component + ') - ' + datetime + '<br>';
 			        //modalArray.push()
 
 			        //add the individual class to the download file
@@ -216,11 +218,11 @@ $(function(){
 			        console.log("Value: " + icsFile[0].value);
 
 
-			        $(this).find('span[id*="MTG_DATES"]').append(
-            			'<br><a href="#" onclick="window.open(\'data:text/calendar;charset=utf8,' +
-            			encodeURIComponent(packageICS(icsFile)) +
-            			'\');">Download Class</a>'
-          			);
+			        // $(this).find('span[id*="MTG_DATES"]').append(
+           //  			'<br><a href="#" onclick="window.open(\'data:text/calendar;charset=utf8,' +
+           //  			encodeURIComponent(packageICS(icsFile)) +
+           //  			'\');">Download Class</a>'
+          	// 		);
 
 		      	}	      
 		    }
@@ -229,15 +231,12 @@ $(function(){
 
   	});
 
-	console.log(packageICS(icsFile));
+	
 
 	//var formList = makeUL(modalContent);
 	modalContent += '</form>';
 	console.log(modalContent);
 	//console.log(formList);
-
-
-
 
 	//HTML for modal popup
   	var html = '<!-- Trigger the modal with a button -->' +
@@ -257,8 +256,8 @@ $(function(){
 				        modalContent +
 				      '</div>' +
 				      '<div class="modal-footer">' +
-				        '<button type="button" class="btn btn-default" data-dismiss="modal">Export</button>' +
-				        '<button type="button" class="btn btn-default" data-dismiss="modal">Download for iCal</button>' +
+				        '<button type="button" class="btn btn-default" data-dismiss="modal" id="Export">Export</button>' +
+				        '<button type="button" class="btn btn-default" data-dismiss="modal" id="Download">Download for iCal</button>' +
 				      '</div>' +
 				    '</div>' +
 
@@ -269,5 +268,13 @@ $(function(){
   	console.log(html);
   	//Insert modal html under My Class Schedule text
 	$('.PATRANSACTIONTITLE').append(html);
+
+	//Handle on click events for button
+	var download = document.getElementById("Download");
+	download.addEventListener('click', function(event) {
+    window.open('data:text/calendar;charset=utf8,' + encodeURIComponent(packageICS(icsFile)));
+  	});
+
+	console.log(packageICS(icsFile));
 
 });
